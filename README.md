@@ -1,3 +1,7 @@
+
+This is a Craft 3 compatible fork of https://github.com/amacneil/craft-inspector  It is not intended to be backward compatible with Craft 2.x.  
+
+
 # Inspector Plugin for Craft CMS
 
 This plugin adds a helpful `inspect` method to your Craft templates. This will help you

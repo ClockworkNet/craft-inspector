@@ -74,8 +74,12 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
         ksort($attributes);
         $out = "\n\nAttributes: ";
         foreach ($attributes as $key => $value) {
-            if (is_array($value) || (is_object($value) && method_exists($value,'toArray')  ) ) {
+            if ( is_array($value) ) {
                 $value = $this->inspectArray($value);
+            }
+            if ( (is_object($value) && method_exists($value,'toArray')  ) ) {
+                $value_arr = $value->toArray();
+                $value = $this->inspectArray($value_arr);
             }
             if ($value instanceof \DateTime) {
                 $out .= sprintf("\n    %-20s ", $key).sprintf("%s", $value->format('Y-m-d H:i:s'));

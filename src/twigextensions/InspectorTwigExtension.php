@@ -4,7 +4,6 @@ namespace amacneil\inspector\twigextensions;
 
 use Twig\TwigFunction;
 use Twig\TwigFilter;
-use Twig\TwigMarkup;
 
 
 class InspectorTwigExtension extends \Twig\Extension\AbstractExtension

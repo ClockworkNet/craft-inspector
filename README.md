@@ -1,5 +1,5 @@
 
-This is a Craft 3 compatible fork of https://github.com/amacneil/craft-inspector  It is not intended to be backward compatible with Craft 2.x.  
+This is a Craft 3 compatible fork of https://github.com/amacneil/craft-inspector.  It is not intended to be backward compatible with Craft 2.x. and removes the twig function support.   
 
 
 # Inspector Plugin for Craft CMS
@@ -15,12 +15,11 @@ they implement.
 
 ## Usage
 
-You can use inspector either as a function or filter:
+You can use inspector as a filter:
 
     {{ craft.request | inspect }}
-    {{ inspect(craft.request) }}
 
-Either way, it will return the same output:
+It will return the same output:
 
     Craft\HttpRequestVariable
     -------------------------

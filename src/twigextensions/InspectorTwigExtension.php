@@ -1,34 +1,30 @@
 <?php
 
-namespace Craft;
+namespace amacneil\inspector\twigextensions;
 
-class InspectorTwigExtension extends \Twig_Extension
+use Twig\TwigFunction;
+use Twig\TwigFilter;
+use Twig\TwigMarkup;
+
+
+class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
 {
-    protected $env;
 
     public function getName()
     {
-        return 'inspector';
+        return 'inspect';
+    }
+
+    public function inDevMode()
+    {
+        return Craft::$app->config->general->devMode;
     }
 
     public function getFilters()
     {
-        return array('inspect' => new \Twig_Filter_Method($this, 'inspect'));
-    }
-
-    public function getFunctions()
-    {
-        return array('inspect' => new \Twig_Function_Method($this, 'inspect'));
-    }
-
-    /**
-     * Initializes the runtime environment.
-     *
-     * @param Twig_Environment $environment The current Twig_Environment instance
-     */
-    public function initRuntime(\Twig_Environment $env)
-    {
-        $this->env = $env;
+        return array(
+            new TwigFilter('inspect', [$this, 'inspect'], ['needs_context' => false, 'needs_environment' => true, 'is_safe' => array('html')]),
+        );
     }
 
     /**
@@ -36,8 +32,12 @@ class InspectorTwigExtension extends \Twig_Extension
      *
      * @param mixed $var
      */
-    public function inspect($var)
+    public function inspect($env, $var)
     {
+        if(!$this->inDevMode()){
+            return '';
+        }
+
         if (is_null($var)) {
             $out = 'null';
         } elseif (is_array($var)) {
@@ -55,8 +55,8 @@ class InspectorTwigExtension extends \Twig_Extension
         } else {
             $out = ucfirst(gettype($var)).': '.print_r($var, true);
         }
-
-        return new \Twig_Markup('<pre><code>'.$out.'</code></pre>', $this->env->getCharset());
+        
+        return "<pre><code>".$out."</code></pre>";
     }
 
     protected function inspectAttributes($var)
@@ -75,11 +75,16 @@ class InspectorTwigExtension extends \Twig_Extension
         ksort($attributes);
         $out = "\n\nAttributes: ";
         foreach ($attributes as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value) || (is_object($value) && method_exists($value,'toArray')  ) ) {
                 $value = $this->inspectArray($value);
             }
-
-            $out .= sprintf("\n    %-20s ", $key).sprintf("%s", $value);
+            if ($value instanceof \DateTime) {
+                $out .= sprintf("\n    %-20s ", $key).sprintf("%s", $value->format('Y-m-d H:i:s'));
+            }
+            else {
+                $keyout = sprintf("\n    %-20s ", $key);
+                $out .= $keyout.sprintf("%s", $value);
+            }
         }
 
         return $out;

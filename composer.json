@@ -1,0 +1,25 @@
+{
+    "name": "amacneil/craft-inspector",
+    "description": "A helpful inspector plugin for Craft CMS",
+    "homepage": "https://github.com/amacneil/craft-inspector",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Adrian Macneil"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "amacneil\\inspector\\": "src/"
+        }
+    },
+    "type": "craft-plugin",
+    "extra": {
+        "handle": "inspector",
+        "name": "Inspector",
+        "class": "amacneil\\inspector\\Plugin",
+        "developer": "Adrian Macneil",
+        "developerUrl": "http://adrianmacneil.com"
+    }
+}

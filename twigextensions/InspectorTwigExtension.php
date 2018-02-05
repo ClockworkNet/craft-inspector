@@ -2,7 +2,15 @@
 
 namespace Craft;
 
+<<<<<<< Updated upstream:twigextensions/InspectorTwigExtension.php
 class InspectorTwigExtension extends \Twig_Extension
+=======
+use Twig\TwigFunction;
+use Twig\TwigFilter;
+use Craft;
+
+class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
+>>>>>>> Stashed changes:src/twigextensions/InspectorTwigExtension.php
 {
     protected $env;
 

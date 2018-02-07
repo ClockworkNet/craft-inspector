@@ -84,7 +84,7 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
             if ($value instanceof \DateTime) {
                 $out .= sprintf("\n    %-20s ", $key).sprintf("%s", $value->format('Y-m-d H:i:s'));
             }
-            elseif ( method_exists( $value, '__toString' ) ) {
+            else {
                 $keyout = sprintf("\n    %-20s ", $key);
                 $valueout = method_exists( $value, '__toString' ) ? $value : get_class( $var );
                 $out .= $keyout.sprintf( "%s", $valueout );

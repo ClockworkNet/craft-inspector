@@ -54,8 +54,14 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
         } else {
             $out = ucfirst(gettype($var)).': '.print_r($var, true);
         }
-        
-        return "<pre><code>".$out."</code></pre>";
+         
+        $preStyle = <<<EOT
+                    style="height: 30px; overflow: hidden; background: #333; color: #ccc;"
+                    onmouseover="this.style.height = 'auto'"
+                    onmouseout="this.style.height = '30px'"
+                    EOT;
+
+        return "<pre style=\"".$preStyle."\">".$out."</pre>";
     }
 
     protected function inspectAttributes($var)

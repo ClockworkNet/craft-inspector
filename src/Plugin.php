@@ -33,6 +33,19 @@ class Plugin extends \craft\base\Plugin
         return 'http://adrianmacneil.com';
     }
 
+
+    public static function dd($data)
+    {
+		\yii\helpers\VarDumper::dump($data, 10, true);
+		Craft::$app->end();
+    }
+
+    public static function dump($data)
+    {
+		return \yii\helpers\VarDumper::dumpAsString($data, 10, true);
+		
+    }
+
 }
 
 

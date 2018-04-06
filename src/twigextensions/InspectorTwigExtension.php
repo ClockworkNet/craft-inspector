@@ -5,6 +5,7 @@ namespace amacneil\inspector\twigextensions;
 use Twig\TwigFunction;
 use Twig\TwigFilter;
 use Craft;
+use amacneil\inspector\Plugin;
 
 class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
 {
@@ -25,7 +26,7 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
             new TwigFilter('inspect', [$this, 'inspect'], ['needs_context' => false, 'needs_environment' => true, 'is_safe' => array('html')]),
         );
     }
-
+    
     /**
      * Display an object as a helpful string representation
      *
@@ -60,38 +61,7 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
 
     protected function inspectAttributes($var)
     {
-        $attributes = array();
-
-        if (method_exists($var, 'getAttributes')) {
-            $attributes = $var->getAttributes();
-        }
-
-        $reflector = new \ReflectionClass($var);
-        foreach ($reflector->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-            $attributes[$property->name] = $property->getValue($var);
-        }
-
-        ksort($attributes);
-        $out = "\n\nAttributes: ";
-        foreach ($attributes as $key => $value) {
-            if ( is_array($value) ) {
-                $value = $this->inspectArray($value);
-            }
-            if ( (is_object($value) && method_exists($value,'toArray')  ) ) {
-                $value_arr = $value->toArray();
-                $value = $this->inspectArray($value_arr);
-            }
-            if ($value instanceof \DateTime) {
-                $out .= sprintf("\n    %-20s ", $key).sprintf("%s", $value->format('Y-m-d H:i:s'));
-            }
-            else {
-                $keyout = sprintf("\n    %-20s ", $key);
-                $valueout = method_exists( $value, '__toString' ) ? $value : get_class( $var );
-                $out .= $keyout.sprintf( "%s", $valueout );
-            }
-        }
-
-        return $out;
+        return Plugin::getInstance()->inspect($var);
     }
 
     protected function inspectMethods($var)
@@ -114,16 +84,6 @@ class InspectorTwigExtension extends \Twig\Extension\AbstractExtension
 
     protected function inspectArray($var)
     {
-        // convert objects to strings
-        foreach ($var as $key => $value) {
-            if (is_object($value)) {
-                $var[$key] = get_class($value);
-                if (method_exists($value, '__toString')) {
-                    $var[$key] .= sprintf(': %s', $value);
-                }
-            }
-        }
-
-        return json_encode($var);
+        return Plugin::getInstance()->inspect($var);
     }
 }

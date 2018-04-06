@@ -34,16 +34,9 @@ class Plugin extends \craft\base\Plugin
     }
 
 
-    public function dd($data)
-    {
-		\yii\helpers\VarDumper::dump($data, 10, true);
-		Craft::$app->end();
-    }
-
-    public function dump($data)
+    public function inspect($data)
     {
 		return \yii\helpers\VarDumper::dumpAsString($data, 10, true);
-		
     }
 
 }
